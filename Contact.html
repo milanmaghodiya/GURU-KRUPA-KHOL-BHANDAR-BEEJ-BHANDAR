@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact - GURU KRUPA KHOL & BEEJ BHANDAR</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f9faff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    h2, h5 {
+      text-align: center;
+    }
+    .form-control {
+      font-size: 1rem;
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand text-primary" href="#">GURU KRUPA KHOL & BEEJ BHANDAR</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="Product.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="About.html">About</a></li>
+          <li class="nav-item"><a class="nav-link active" href="Contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contact Section -->
+  <main class="container my-4 px-3">
+    <h2 class="text-primary mb-4">Contact Us</h2>
+
+    <div class="row">
+      <!-- Contact Form -->
+      <div class="col-md-7">
+        <form id="contactForm" method="POST" action="https://formspree.io/f/FORM_ENDPOINT_HERE">
+          <div class="mb-3">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required />
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" />
+          </div>
+          <div class="mb-3">
+            <label for="message" class="form-label">Your Message</label>
+            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Write your message here" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="col-md-5 mt-4 mt-md-0">
+        <h5 class="mb-3">Contact Information</h5>
+        <p><strong>Address:</strong><br> Guru Krupa Street, Aamra, Jamnagar, Gujarat, India</p>
+        <p><strong>Phone:</strong><br> +91 63525 70216</p>
+        <p><strong>Email:</strong><br> maghodiyamilan66@gmail.com</p>
+        <p><strong>Working Hours:</strong><br> Mon - Sun: 7:30 AM to 9:00 PM</p>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7525372.8672565725!2d67.6148225016999!3d22.93186236295745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3957174f6db940b1%3A0x9c35e0624f7933b6!2sGURUKRUPA%20KHOL%20BHANDAR!5e0!3m2!1sen!2sin!4v1749644616142!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phonePattern = /^[0-9]{10,}$/;
+
+      if (name.length < 3) {
+        alert('Please enter your full name with at least 3 characters.');
+        event.preventDefault();
+        return;
+      }
+
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+        event.preventDefault();
+        return;
+      }
+
+      if (phone.length > 0 && !phonePattern.test(phone)) {
+        alert('Please enter a valid phone number with at least 10 digits.');
+        event.preventDefault();
+        return;
+      }
+
+      if (message.length < 10) {
+        alert('Please enter a message with at least 10 characters.');
+        event.preventDefault();
+        return;
+      }
+
+      alert('Thank you! Your message is being sent.');
+    });
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title>GURU KRUPA KHOL & BEEJ BHANDAR</title>
+   <link href="css/bootstrap.min.css" rel="stylesheet">
+   <link href="css/style.css" rel="stylesheet">
+   <style>
+     .product-card {
+       border: 1px solid #ccc;
+       border-radius: 10px;
+       padding: 15px;
+       margin-bottom: 20px;
+       box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+     }
+     img.product-image {
+       height: 150px;
+       width: 100%;
+       object-fit: cover;
+       border-radius: 8px;
+     }
+     .payment-logo {
+       height: 25px;
+       margin-right: 10px;
+       vertical-align: middle;
+     }
+   </style>
+</head>
+<body>
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg bg-white">
+    <div class="container">
+      <a class="navbar-brand text-primary" href="#">GURU KRUPA KHOL & BEEJ BHANDAR</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="Product.html">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="About.html">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="Contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Navbar End -->
+
+  <div class="container my-5">
+    <h2 class="text-primary mb-4 text-center">Our Products</h2>
+    <div class="row" id="product-list"></div>
+
+    <h3 class="text-success mt-5">Your Cart</h3>
+    <ul id="cart" class="list-group mb-3"></ul>
+    <p><strong>Total:</strong> ₹<span id="total">0</span></p>
+
+    <h4>Choose Payment Method</h4>
+    <div class="mb-3">
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="googlePay" value="Google Pay" checked>
+        <label class="form-check-label" for="googlePay">
+          <img src="image/google.png" class="payment-logo"> Google Pay
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="phonePe" value="PhonePe">
+        <label class="form-check-label" for="phonePe">
+          <img src="image/phonpy.png" class="payment-logo"> PhonePe
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="Cash on Shop">
+        <label class="form-check-label" for="cash">
+          <img src="image/cas.png" class="payment-logo"> Cash on Shop
+        </label>
+      </div>
+    </div>
+
+    <button id="payBtn" class="btn btn-primary" disabled>Pay Now</button>
+
+    <div id="paymentFormContainer" class="mt-4" style="display:none;">
+      <h4>Enter Payment Details</h4>
+      <form id="paymentForm">
+        <div class="mb-3">
+          <label for="accountHolder" class="form-label">Account Holder Name</label>
+          <input type="text" class="form-control" id="accountHolder" required pattern="[A-Za-z\s]{2,}" title="Enter a valid name (letters only)">
+        </div>
+        <div class="mb-3">
+          <label for="accountNumber" class="form-label">Account Number</label>
+          <input type="text" class="form-control" id="accountNumber" required pattern="[0-9]{9,18}" title="Account number must be 9-18 digits">
+        </div>
+        <div class="mb-3">
+          <label for="ifscCode" class="form-label">IFSC Code</label>
+          <input type="text" class="form-control" id="ifscCode" required pattern="^[A-Z]{4}0[A-Z0-9]{6}$" title="Example: SBIN0001234">
+        </div>
+        <div class="mb-3">
+          <label for="bankName" class="form-label">Bank Name</label>
+          <input type="text" class="form-control" id="bankName" required pattern="[A-Za-z\s]{2,}" title="Bank name should be letters only">
+        </div>
+        <button type="submit" class="btn btn-success">Confirm Payment</button>
+      </form>
+    </div>
+
+    <div id="paymentMessage" class="mt-3"></div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Cotton Seeds', price: 1200, image: 'image/kapas.jpg' },
+      { id: 2, name: 'Groundnut Seeds', price: 2300, image: 'image/magfali.jpg' },
+      { id: 3, name: 'Bajra Seeds', price: 950, image: 'image/bajra.jpg' },
+      { id: 4, name: 'Wheat Seeds', price: 950, image: 'image/ghau.jpg' },
+      { id: 5, name: 'Bhindi Seeds', price: 160, image: 'image/bhindo.jpg' },
+      { id: 6, name: 'Dudhi Seeds', price: 140, image: 'image/dudhi.jpg' },
+      { id: 7, name: 'Brinjal Seeds', price: 130, image: 'image/ringla.jpg' },
+      { id: 8, name: 'Cow Eat Khol', price: 1750, image: 'image/raghupatiram.png' },
+      { id: 9, name: 'Soyaben Beej', price: 1700, image: 'image/soyaben.png' } // ✅ NEW PRODUCT
+    ];
+
+    let cart = [];
+
+    function renderProducts() {
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
+      products.forEach(product => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4';
+        col.innerHTML = `
+          <div class="product-card text-center">
+            <img src="${product.image}" alt="${product.name}" class="product-image mb-2">
+            <h5>${product.name}</h5>
+            <p>Price: ₹${product.price}</p>
+            <button class="btn btn-sm btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+          </div>
+        `;
+        productList.appendChild(col);
+      });
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById('cart');
+      const totalSpan = document.getElementById('total');
+      cartList.innerHTML = '';
+      let total = 0;
+
+      cart.forEach(item => {
+        const product = products.find(p => p.id === item.id);
+        total += product.price * item.quantity;
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `
+          ${product.name} x ${item.quantity} = ₹${product.price * item.quantity}
+          <span>
+            <button class="btn btn-sm btn-danger me-2" onclick="removeFromCart(${item.id})">-</button>
+            <button class="btn btn-sm btn-success" onclick="addToCart(${item.id})">+</button>
+          </span>
+        `;
+        cartList.appendChild(li);
+      });
+
+      totalSpan.textContent = total;
+      document.getElementById('payBtn').disabled = total === 0;
+      document.getElementById('paymentMessage').innerHTML = '';
+      hidePaymentForm();
+    }
+
+    function addToCart(productId) {
+      const item = cart.find(p => p.id === productId);
+      if (item) {
+        item.quantity++;
+      } else {
+        cart.push({ id: productId, quantity: 1 });
+      }
+      renderCart();
+    }
+
+    function removeFromCart(productId) {
+      const index = cart.findIndex(p => p.id === productId);
+      if (index > -1) {
+        cart[index].quantity--;
+        if (cart[index].quantity <= 0) {
+          cart.splice(index, 1);
+        }
+      }
+      renderCart();
+    }
+
+    function showPaymentForm() {
+      const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const container = document.getElementById('paymentFormContainer');
+      if (method === "Google Pay" || method === "PhonePe") {
+        container.style.display = 'block';
+      } else {
+        container.style.display = 'none';
+      }
+    }
+
+    function hidePaymentForm() {
+      const container = document.getElementById('paymentFormContainer');
+      container.style.display = 'none';
+      document.getElementById('paymentForm').reset();
+    }
+
+    document.getElementById('payBtn').addEventListener('click', () => {
+      const total = document.getElementById('total').textContent;
+      const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+      if (total === '0') return;
+      if (method === "Google Pay" || method === "PhonePe") {
+        showPaymentForm();
+      } else {
+        document.getElementById('paymentMessage').innerHTML = `
+          <div class="alert alert-info">
+            You chose <strong>${method}</strong>. Please pay ₹${total} at the shop.
+          </div>
+        `;
+        hidePaymentForm();
+      }
+    });
+
+    document.getElementById('paymentForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const total = document.getElementById('total').textContent;
+      const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const holder = document.getElementById('accountHolder').value.trim();
+      const number = document.getElementById('accountNumber').value.trim();
+      const ifsc = document.getElementById('ifscCode').value.trim();
+      const bank = document.getElementById('bankName').value.trim();
+
+      document.getElementById('paymentMessage').innerHTML = `
+        <div class="alert alert-success">
+          Payment of ₹${total} via <strong>${method}</strong> is being processed.<br/>
+          <strong>Account Holder:</strong> ${holder} <br/>
+          <strong>Account Number:</strong> ${number} <br/>
+          <strong>IFSC Code:</strong> ${ifsc} <br/>
+          <strong>Bank Name:</strong> ${bank}
+        </div>
+      `;
+      cart = [];
+      renderCart();
+      hidePaymentForm();
+    });
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
+      input.addEventListener('change', () => {
+        hidePaymentForm();
+        document.getElementById('paymentMessage').innerHTML = '';
+      });
+    });
+
+    renderProducts();
+    renderCart();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
